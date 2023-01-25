@@ -1,0 +1,29 @@
+service: util-service
+
+plugins:
+  - serverless-dotenv-plugin
+
+frameworkVersion: "3"
+
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: staging
+  region: us-east-1
+  endpointType: Edge
+  timeout: 30
+  environment:
+    REGION: ${env:REGION}
+    BUCKET: ${env.BUCKET}
+
+functions:
+  imageResize:
+    role: EdgeLambdaRole
+    handler: handler.handler
+    name: ${self.service}
+    package:
+      include:
+        - node_modules/**
+        - handler.js
